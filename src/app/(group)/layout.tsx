@@ -1,6 +1,7 @@
 "use client";
 
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { createContext, useEffect, useState, ReactNode } from "react";
 import { User } from "../../../generated/prisma";
 import { Company } from "../../../generated/prisma";
@@ -40,8 +41,11 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
-      <Header />
-      {children}
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1">{children}</main>
+        <Footer />
+      </div>
     </UserContext.Provider>
   );
 }

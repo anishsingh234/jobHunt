@@ -4,12 +4,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 // Type for route context
 type Context = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 // --- GET Handler ---
 export async function GET(req: NextRequest, context: Context) {
-  const id = context.params.id;
+  const { id } = await context.params;
 
   const company = await prismaclient.company.findUnique({
     where: {
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest, context: Context) {
 
 export async function DELETE(req: NextRequest, context: Context) {
   try {
-    const id = context.params.id;
+    const { id } = await context.params;
     const user = await getUserFromCookies();
 
     if (!user) {

@@ -1,8 +1,8 @@
 
 import prismaclient from "@/services/prisma"
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 
-export async function GET(req)
+export async function GET(req:NextRequest)
 {
     const res=await prismaclient.openings.findMany()
        return NextResponse.json({

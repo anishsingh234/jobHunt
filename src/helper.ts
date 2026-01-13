@@ -1,43 +1,42 @@
-//@ts-nocheck
 import { cookies } from "next/headers";
 import prismaclient from "./services/prisma";
 import { verifyToken } from "./services/jwt";
 
 export async function getUserFromCookies() {
-  try{
-  const userCookies = await cookies();
-  const token = userCookies.get("token")?.value;
-  console.log("token",token)
-  if (!token) {
-    return null;
-  }
-  const data = verifyToken(token);
-  console.log("data helper function ",data)
-  console.log("data id in helper",data.id)
-  if (!data) {
-    return null;
-  }
-  const user = await prismaclient.user.findUnique({
-    where: {
-      id: data.id,
-    },
-    include:{
-      company:true,
-    },
-    omit: {
-      password: true,
-    },
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token")?.value;
 
-  });
-  console.log("user helper function",user)
-  if (!user) {
+    if (!token) {
+      return null;
+    }
+
+    const decoded = verifyToken(token);
+
+    if (!decoded || !decoded.id) {
+      return null;
+    }
+
+    const user = await prismaclient.user.findUnique({
+      where: {
+        id: decoded.id,
+      },
+      include: {
+        company: true,
+      },
+      omit: {
+        password: true,
+      },
+    });
+
+    return user;
+  } catch (error) {
+    console.error("Error getting user from cookies:", error);
     return null;
   }
-   return user;
 }
- 
-   catch(err)
-   {
-    console.log("error in helper",err.message)
-   }
+
+export async function isAuthenticated(): Promise<boolean> {
+  const user = await getUserFromCookies();
+  return user !== null;
 }

@@ -4,10 +4,10 @@ import { getUserFromCookies } from "@/helper";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: job_id } = await params;
   const user = await getUserFromCookies();
-  const job_id = params.id;
 
   if (!user) {
     return NextResponse.json({

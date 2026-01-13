@@ -1,10 +1,8 @@
 import prismaclient from "@/services/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest, { params }) {
-  console.log("params", params.id);
-  const id = params.id;
-  console.log("id", id);
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   try {
     const job = await prismaclient.openings.findUnique({
       where: {
@@ -35,9 +33,9 @@ export async function GET(req: NextRequest, { params }) {
 }
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const jobId = params.id;
+  const { id: jobId } = await params;
 
   try {
     const body = await req.json();
@@ -65,8 +63,8 @@ export async function POST(
   }
 }
 
-export async function DELETE(req, { params }) {
-  const id = params.id;
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
 
   try {
     const job = await prismaclient.openings.delete({
