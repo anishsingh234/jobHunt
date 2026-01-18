@@ -16,14 +16,12 @@ import {
   TrendingUp,
 } from "lucide-react";
 
+
 interface PageProps {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 }
 
-export default async function Page({ params }: PageProps) {
-  const id = params.id;
+  const { id } = await params;
   let company = null;
   let owner = null;
   let reviews = [];
