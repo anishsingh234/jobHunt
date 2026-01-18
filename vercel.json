@@ -1,0 +1,18 @@
+# Vercel Configuration for Next.js
+
+# This file tells Vercel to use Next.js build and output settings
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[install]
+  command = "npm install"
+
+[output]
+  directory = ".next"
+
+# Prisma: Set up environment variables for database connection
+# Add your DATABASE_URL in Vercel dashboard or .env file
+
+# If you use serverless functions, you may want to use the Data Proxy
+# https://www.prisma.io/docs/guides/deployment/deployment-guides/deploying-to-vercel
